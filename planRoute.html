@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>gUber</title>
+
+	<link rel="stylesheet" href="main.css">
+		<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+<!-- navbar -->
+	<header class = "navbar-default">
+	    <div class="container">
+	    <nav class="navbar navbar-inverse" role = "navi">
+	      
+	        <!-- Brand and toggle get grouped for better mobile display -->
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="mainPage.html">Connor Svrcek</a>
+	        </div>
+	        <!-- Collect the nav links, forms, and other content for toggling -->
+	        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	          <ul class="nav navbar-nav">
+	            <li><a href="resume.html">Resume <span class="sr-only"></span></a></li>
+	            <li class="dropdown active">
+	              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
+	              <ul class="dropdown-menu">
+					<!-- Dropdown menu options -->
+	              	<li><a href="projects.html">All Projects</a></li>
+	              	<li role = "separator" class = "divider"></li>
+	                <li><a href="spartaHack.html">SpartaHack 2017</a></li>
+	                <li role="separator" class="divider"></li>
+	                <li><a href="magic8.html">Magic 8</a></li>
+	                <li><a href="website.html">Website</a></li>
+	                <li role="separator" class="divider"></li>
+	                <li><a href="brakeCoef.html">Braking Coefficient</a></li>
+	                <li><a href="testMaterials.html">Runway Material</a></li>
+	                <li class = "active"><a href="planRoute.html">gUber</a></li>
+	              </ul>
+	            </li>
+	            <li><a href="connect.html">Connect</a></li>
+	          </ul>
+	          
+	          
+	        </div><!-- /.navbar-collapse -->
+	      </div><!-- /.container-fluid -->
+	    </nav>
+	  </header>
+
+	<!-- Title -->
+	<h1 class = "header">gUber</h1>
+
+	<br />
+
+	<!-- Photo -->
+	<div style="text-align: center">
+		<img class = "img-circle" src="spaceCar.jpeg">
+	</div>
+
+	<br />
+
+	<!-- Description -->
+	<h2>Description</h2>
+
+	<div>
+		<p class = "paragraph">The third and final C++ project of Engineering 101. gUber involves every C++ and coding concept taught in that class. The main issue being solved in the project was the <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem" target="_blank">Travelling Salesman Problem</a>, a famous math problem where one is given a list of points and distances between them and must find the shortest possible route to visit all the points and return to the starting point. The backstory of the project was that there was a sort of intergalactic delivery service, and the students needed to write a program to provide the deliverers step-by-step directions to each planet to go to, given a set of planets and their location on a grid. Provided to the students were the starting/ending coordinates, all the planet names, their coordinates on the map, their symbol, and their ID number. From there, we had to read in all this information and create a grid of the planets, with their symbol at the correct location. The last step was to make the turn-by-turn navigation. The program then told the user what the starting coordinates were, each direction that needed to be taken, and finally the ending coordinate.</p>
+	</div>
+
+	<br />
+
+	<!-- Photos -->
+	<h2>Photos</h2>
+	<br />
+
+	<div>
+		<p class = "paragraph">Photos not applicable to this project.</p>
+	</div>
+	<br />
+
+	<!-- Code -->
+	<h2>Code</h2>
+
+	<br />
+
+	<pre class = "prettyprint code lang-cpp linenums">
+		// Connor Svrcek, 4/13/17, Section 3, no partner
+		#include < iostream> 
+		#include < vector>
+		#include < fstream>
+		#include < cmath>
+		using namespace std;
+
+		// Create the struct for the planet info to be stored in
+		struct planet
+		{
+			int row;
+			int column;
+			char symbol;
+			int id;
+			string name;
+			bool visited;
+		};
+
+		vector< vector< char> > makeMap(int numRows, int numColumns, int startRow, int startColumn, int endRow, int endColumn, vector< planet> allPlanets)
+		{
+			// Creates the map of the planets in a vector of vectors
+
+			// Create the vector of vectors
+			vector< vector< char> > map(numRows);
+
+			// Create the vector of dots
+			vector< char> dots(numColumns, '.');
+
+			// Loop through to store the periods in the vector of vectors
+			for(int i = 0; i < map.size(); ++i)
+			{
+				// Store the dot vector in each element of the vector of vectors
+				map.at(i) = dots;
+			}
+
+			// Store each symbol in their appropriate location
+			for(int i = 0; i < allPlanets.size(); ++i)
+			{
+				// Check if the coordinates of the planet are within the number of rows and columns
+				if(allPlanets.at(i).row <= numRows && allPlanets.at(i).column <= numColumns)
+				{
+					// Store the planet's symbol in the map at the coordinates
+					map.at(allPlanets.at(i).row - 1).at(allPlanets.at(i).column - 1) = allPlanets.at(i).symbol;
+				}
+			}
+
+			// Store the start and end symbols on the map
+			map.at(startRow - 1).at(startColumn - 1) = 'S';
+			map.at(endRow - 1).at(endColumn - 1) = 'E';
+
+			// Return the actual map
+			return map;
+
+
+
+		}
+
+		void printMap(ofstream &journey_out, const vector< vector< char> > &map)
+		{
+			// Takes in the makeMap function output and prints it out to the journey file
+
+			//Loop through the vector of vectors
+			for(int i = 0; i < map.size(); ++i)
+			{
+				// Loop through the current element of the vector of vectors
+				for(int j = 0; j < map.at(i).size(); ++j)
+				{
+					// Print out the current element within the vector
+					journey_out << map.at(i).at(j);
+				}
+				// End line after every element of the vector of vectors
+				journey_out << endl;
+			}
+		}
+
+		void fixPlanetNames(ifstream &names_in, int id, string name, vector< planet> &allPlanets)
+		{
+			// Takes in the file stream and corrects the errors in the planet names
+
+			// Loop as long as there are things to read in
+			while(names_in >> id >> name)
+			{
+				// Loop through the entire vector of structs
+				for(int i = 0; i < allPlanets.size(); ++i)
+				{
+					// If the id's correspond, fix the issues
+					if(allPlanets.at(i).id == id)
+					{
+						// If there are "XX"s in the word, delete them
+						while(name.find("XX") != name.npos)
+						{
+							name.replace(name.find("XX"), 2, "");
+						}
+						
+						//If there are "_"s in the word, replace them with a space
+						while(name.find("_") != name.npos)
+						{
+							name.replace(name.find("_"), 1, " ");
+						}
+
+						// Store the new name in the struct
+						allPlanets.at(i).name = name;
+					}
+				}
+			}
+		}
+
+		int sumVisited(vector< planet> &allPlanets)
+		{
+			// A function that finds the total number of visited planets
+
+			// Initialize the total and set it equal to 0
+			int total = 0;
+
+			// Loop through the entire allPlanets vector and count the number of visited planets
+			for(int i = 0; i < allPlanets.size(); ++i)
+			{
+				// Add the visited status to the total
+				total = total + allPlanets.at(i).visited;
+			}
+
+			// Return the total variable
+			return total;
+		}
+
+
+
+		int main()
+		{
+			// Ask the user for the input files and store them as variables
+			cout << "Enter Locations Filename: ";
+			string locationsFile;
+			cin >> locationsFile;
+
+			cout << "Enter Names Filename: ";
+			string namesFile;
+			cin >> namesFile;
+
+			// Open the input/output file streams
+			ifstream locations_in(locationsFile.c_str());
+			ifstream names_in(namesFile.c_str());
+			ofstream journey_out("journey.txt");
+
+			// Check if the streams opened correctly
+			if (!locations_in.is_open() || !names_in.is_open())
+			{
+				cout << "Input file could not be opened" << endl;
+				return 1;
+			}
+
+			// Create the vector of vectors to store the structs
+			vector< planet> allPlanets;
+
+			// Initialize variables to be stored
+			int numRows, numColumns, startRow, startColumn, endRow, endColumn, id;
+			string name;
+
+			// Store the first info from the locations file as variables
+			locations_in >> numRows >> numColumns >> startRow >> startColumn >> endRow >> endColumn;
+
+			// Create a struct of type planet
+			planet myPlanet;
+
+			// Loop through the rest of the data
+			while(locations_in >> myPlanet.row >> myPlanet.column >> myPlanet.symbol >> myPlanet.id)
+			{
+				// If the coordinates are out of range, ignore it
+				if(myPlanet.row > numRows || myPlanet.column > numColumns || myPlanet.row <= 0 || myPlanet.column <= 0)
+				{
+					cout << myPlanet.id << " out of range - ignoring" << endl;
+				}
+
+				// If it's within the limits of the map, add it to the vector of structs
+				else
+				{
+					allPlanets.push_back(myPlanet);
+				}
+				
+			}
+
+			// Call fixPlanetNames function
+			fixPlanetNames(names_in, id, name, allPlanets);
+
+			// Call makeMap function and store the output of that function
+			makeMap(numRows, numColumns, startRow, startColumn, endRow, endColumn, allPlanets);
+			vector< vector< char> > map = makeMap(numRows, numColumns, startRow, startColumn, endRow, endColumn, allPlanets);
+
+			// Call the printMap function
+			printMap(journey_out, map);
+
+			// Output the starting position
+			journey_out << "Start at " << startRow << " " << startColumn << endl;
+
+			// Initialize shortestDistance
+			double shortestDistance = 10000000;
+
+			// Initialize coordinate variables
+			double currentX = startRow;
+			double currentY = startColumn;
+			double potentialX, potentialY;
+			double endX = endRow;
+			double endY = endColumn;
+
+			// Make all the visited slots 0
+			for(int i = 0; i < allPlanets.size(); ++i)
+			{
+				allPlanets.at(i).visited = 0;
+			}
+
+			// Store output of sumVisited
+			int total = sumVisited(allPlanets);
+
+			double bestDistance = 10000000;
+
+			// Iterate as long as there are planets to visit
+			while(total < allPlanets.size())
+			{
+				// Declare a variable to substitute for 'i'
+				int position;
+
+				bestDistance = 10000000;
+
+				// Iterate as long as all the planets have been checked
+				for(int i = 0; i < allPlanets.size(); ++i)
+				{
+					// Check if the planet has been visited
+					if(!allPlanets.at(i).visited)
+					{
+						// Give the potential coordinates values
+						potentialX = allPlanets.at(i).row;
+						potentialY = allPlanets.at(i).column;
+
+						// Calculate the distance between the two points
+						double distance = sqrt( pow((currentX - potentialX), 2) + pow((currentY - potentialY), 2) );
+
+						// Check if the calculated distance is shorter than the best distance
+						if(distance < bestDistance)
+						{
+							// Set the calculated distance equal to the bestDistance
+							bestDistance = distance;
+
+							// Set the current i equal to the position variable
+							position = i;
+						}
+
+						// Check if the best distances are the same
+						else if(distance == bestDistance)
+						{
+							// Check if the current planet's id is less than the id of the closest planet
+							if(allPlanets.at(position).id > allPlanets.at(i).id)
+							{
+								// Make the calculated distance the bestDistance
+								bestDistance = distance;
+
+								// Set the current i equal to the position variable
+								position = i;
+							}
+						}
+					}
+				}
+
+				// Output the direction
+				journey_out << "Go to " << allPlanets.at(position).name << " at " << allPlanets.at(position).row << " " << allPlanets.at(position).column << endl;
+
+				// Say the planet has been visited
+				allPlanets.at(position).visited = 1;
+			
+				// Reset the current coordinates
+				currentX = allPlanets.at(position).row;
+				currentY = allPlanets.at(position).column;
+
+				
+				// Add one to the total number of planets visited
+				++total;
+			}
+
+			// Output the end location
+			journey_out << "End at " << endX << " " << endY << endl;
+			
+			// Close the file streams
+			locations_in.close();
+			names_in.close();
+			journey_out.close();
+		}
+	</pre>
+
+	<br />
+	<!-- Input files -->
+	<h2>Input Files</h2>
+
+	<h3>Locations File</h3>
+
+	<pre class = "code">
+		 13  5
+		  2  5
+		  5  1
+		  3  3 X 7924
+		 13  1 T 5555
+		  5  2 Q 8753
+		 19  4 Q 8434
+		  8  3 P 2341
+		  7  1 X 2523
+		  1 19 T 6341
+		  1  3 X 5125
+		 -2  2 T 7632
+		  1  0 Q 1111
+		  6  3 A 9349
+	</pre>
+
+	<br />
+
+	<h3>Names File</h3>
+
+	<pre class = "code">
+		9349 The_Library
+		8753 New_Earth_(Planet_Bob)
+		5555 Fhloston_Paradise
+		2523 Jupiter_Two
+		7924 Domeo_And_James_Juliett
+		5125 Etheria_and_Eternia
+		6341 Planet_X
+		1111 Jaros_II_and_The_Kyln
+		8434 Polyphemus_and_Pandora
+		2341 The_Discworld
+		7632 Planet_Drool
+
+
+	</pre>
+
+	<br />
+
+	<!-- Text file -->
+	<h2>Output File</h2>
+
+	<pre class="code">
+		..X..
+		....S
+		..X..
+		.....
+		EQ...
+		..A..
+		X....
+		..P..
+		.....
+		.....
+		.....
+		.....
+		T....
+		Start at 2 5
+		Go to Etheria and Eternia at 1 3
+		Go to Domeo And James Juliett at 3 3
+		Go to New Earth (Planet Bob) at 5 2
+		Go to The Library at 6 3
+		Go to The Discworld at 8 3
+		Go to Jupiter Two at 7 1
+		Go to Fhloston Paradise at 13 1
+		End at 5 1
+
+	</pre>
+
+	<!-- Code display -->
+	<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>

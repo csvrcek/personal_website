@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Runway Material</title>
+
+	<link rel="stylesheet" href="main.css">
+		<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+<!-- navbar -->
+	<header class = "navbar-default">
+	    <div class="container">
+	    <nav class="navbar navbar-inverse" role = "navi">
+	      
+	        <!-- Brand and toggle get grouped for better mobile display -->
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="mainPage.html">Connor Svrcek</a>
+	        </div>
+	        <!-- Collect the nav links, forms, and other content for toggling -->
+	        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	          <ul class="nav navbar-nav">
+	            <li><a href="resume.html">Resume <span class="sr-only"></span></a></li>
+	            <li class="dropdown active">
+	              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
+	              <ul class="dropdown-menu">
+					<!-- Dropdown menu options -->
+	              	<li><a href="projects.html">All Projects</a></li>
+	              	<li role = "separator" class = "divider"></li>
+	                <li><a href="spartaHack.html">SpartaHack 2017</a></li>
+	                <li role="separator" class="divider"></li>
+	                <li><a href="magic8.html">Magic 8</a></li>
+	                <li><a href="website.html">Website</a></li>
+	                <li role="separator" class="divider"></li>
+	                <li><a href="brakeCoef.html">Braking Coefficient</a></li>
+	                <li class = "active"><a href="testMaterials.html">Runway Material</a></li>
+	                <li><a href="planRoute.html">gUber</a></li>
+	              </ul>
+	            </li>
+	            <li><a href="connect.html">Connect</a></li>
+	          </ul>
+	          
+	          
+	        </div><!-- /.navbar-collapse -->
+	      </div><!-- /.container-fluid -->
+	    </nav>
+	  </header>
+	
+	<!-- Title -->
+	<h1 class = "header">Runway Material</h1>
+
+	<br />
+
+	<!-- Photo -->
+	<div style="text-align: center">
+		<img class = "img-circle" src="runway.jpeg">
+	</div>
+
+	<br />
+
+	<!-- Description -->
+	<h2>Description</h2>
+
+	<div>
+		<p class = "paragraph">Runway Material was the second C++ project in Engineering 101. This program had to decide whether or not certain materials could to be used to build an airplane runway, based on given constraints. These constraints varied for each test case, and the project had to evaluate the materials correctly. To do this, information about several materials was read in from multiple files. From there, the program ran tests on each material with the information given. If one of the three conditions (heat, stress and cost) was not met, then the material didn't pass and could not be used to build the runway. After each material was tested, a report text file was then generated to give a complete evaluation of each material and which ones could be used.</p>
+	</div>
+
+	<br />
+
+	<!-- Photos -->
+	<h2>Photos</h2>
+	<br />
+
+	<div>
+		<p class = "paragraph">Photos not applicable to this project.</p>
+	</div>
+	<br />
+
+	<!-- Code -->
+	<h2>Code</h2>
+
+	<br />
+
+	<pre class = "prettyprint code lang-cpp linenums">
+		// Connor Svrcek, Section 3, 4/5/17, no partner
+		#include < iostream>
+		#include < vector>
+		#include < fstream>
+		using namespace std;
+
+		void readProperties(ifstream &prop_in, vector < string> &matName, vector < double> &k,
+			vector < double> &Y, vector < double> &c)
+
+			// Reads in the material properties from a file and saves them into vectors
+			// using the following inputs:
+			//	 prop_in - an input filestream (ifstream) that is already connected to the 
+			//			   material_properties.txt file
+			// 	 k - vector of material thermal conductivity
+			// 	 Y - vector of material yield strength
+			// 	 c - vector of material cost/volume
+		{
+
+			// Create variables for information in material_properties.txt
+			string vmatName;
+			double vk, vY, vc;
+			
+			// Loop to store information in material_properties.txt into vectors
+			for (int i = 0; i < 6; ++i)
+			{
+				// Store info into variables
+				prop_in >> vmatName >> vk >> vY >> vc;
+
+				// Store variables into vectors
+				matName.push_back(vmatName);
+				k.push_back(vk);
+				Y.push_back(vY);
+				c.push_back(vc);
+			}
+			
+
+		}
+
+		bool evalHeatTransfer(double k, double t, double d, double diffT, double L,
+			double Q_threshold)
+
+			// Calculates whether a single material passes the heat transfer design constraint
+			// using the following inputs:
+			// 	 k - the material’s thermal conductivity
+		    //   t - the time the heat is transferred
+			// 	 d - the material's thickness
+			//	 diffT - the temperature difference from one side of the wall to the other
+			//	 L - the length of the panel
+			//	 Q_threshold - the minimum heat transfer required
+		{
+			// Initialize the heat variable
+			double Q;
+
+			// Find Q from the equation given
+			Q = k * t * (1 * L) * (diffT / d);
+
+			// Compare Q to Q_threshold and output boolean
+			if (Q > Q_threshold)
+			{
+				return 1;
+			}
+
+			else 
+			{
+				return 0;
+			}
+
+		}
+
+		bool evalStress(double Y, double F, double L, double S)
+
+			// Calculates whether a single material passes the stress design constraint using
+			// the following inputs:
+			//	Y - the material's yield strength
+			// 	F - the force on the panel
+			// 	L - the length of the panel
+			// 	S - the section modulus of the panel
+		{
+			// Initialize the stress variable
+			double stress;
+
+			// Find stress from the given equation
+			stress = (F * L) / (4 * S);
+
+			// Compare calculated stress to yield strength
+			if (Y > stress)
+			{
+				return 1;
+			}
+
+			else
+			{
+				return 0;
+			}
+
+		}
+
+		bool evalCost(double c, double d, double L, double C_threshold)
+
+			// Calculates whether a single material passes the cost constraint using
+			// the following inputs (assume the width of the panel is 1m):
+			// 	 c - the cost/volume of the material
+			// 	 d - the material's thickness
+			// 	 L - the length of the panel
+			// 	 C_threshold - the maximum cost allowed
+		{
+			// Initialize the cost/panel variable
+			double cPanel;
+
+			// Find cost/panel from the given equation
+			cPanel = c * d * 1 * L;
+
+			// Initialize the cTotal variable
+			double cTotal;
+
+			// Find total cost from the given equation
+			cTotal = 30000 * cPanel;
+
+			// Compare total cost to cost threshold
+			if (cTotal < C_threshold)
+			{
+				return 1;
+			}
+
+			else
+			{
+				return 0;
+			}
+
+		}
+
+		bool materialIsKnown(int id)
+
+			// Checks to see if the material ID is known using the following inputs:
+			// 	 id - material ID number
+		{
+			// If the material id is less than or equal to 6, return true
+			if (id <= 6 && id >= 1)
+			{
+				return 1;
+			}
+
+			// If the material id is greater than 6, return false
+			else
+			{
+				return 0;
+			}
+		}
+
+		void printHeader(int t_case, double length, double thickness, double Q_th, 
+			double C_th, int N, ofstream &out)
+
+			// Prints out the test case parameters to the output file using the following
+			// inputs:
+			// 	 t_case - the test case number
+			// 	 length - the length of the panel
+			// 	 thickness - the material's thickness
+			// 	 Q_th - the minimum heat transfer required
+			// 	 C_th - the maximum cost allowed
+			// 	 N - the number of panels for the runway
+			// 	 out - an output filestream (ofstream) that is already connected to the
+			// 	 		   report.txt file
+		{	
+			// Print the first line to report.txt
+			out << "Test Case " << t_case << endl;
+
+			// Print the rest of the lines
+			out << "L = " << length << endl;
+
+			out << "d = " << thickness << endl;
+
+			out << "Q = " << Q_th << endl;
+
+			out << "C = " << C_th << endl;
+
+		}
+
+
+		int main()
+		{
+			// Declare the vectors to be used in the int main function
+			vector < string> matName;
+			vector < double> k, Y, c;
+			
+			// Create an ifstream for the material_properties.txt
+			ifstream prop_in("material_properties.txt");
+
+			// Create an ifstream for the test_cases.txt
+			ifstream cases_in("test_cases.txt");
+
+			// Make sure the material_properties file was opened correctly
+			if( !prop_in.is_open() )
+			{
+				cout << "material_properties.txt could not be opened." << endl;
+				return 1;
+			}
+
+			// Make sure the file was opened correctly
+			if ( !cases_in.is_open() )
+			{
+				cout << "test_cases.txt could not be opened." << endl;
+				return 1;
+			}
+
+			// Call readProperties function to store file in vectors
+			readProperties(prop_in, matName, k, Y, c);
+
+			// Close the stream to material_properties.txt
+			prop_in.close();
+
+			// Start the test case number at 1
+			int t_case = 1;
+			
+			// Open the file stream to output to report.txt
+			ofstream out("report.txt");
+
+			// Define variables for test cases
+			double t, diffT, L, d, S, Q_threshold, C_threshold;
+			int numOfMat, id; 
+			int numAcceptable = 0;
+
+			// Run tests as long as there's info from the test case
+			while(cases_in >> t >> diffT >> L >> d >> S >> Q_threshold >> C_threshold >> numOfMat)
+			{
+				// Run printHeader function
+				printHeader(t_case, L, d, Q_threshold, C_threshold, 30000, out);
+
+				// Output how many materials are being processed
+				out << "Processing " << numOfMat << " materials" << endl;
+
+				// Reset the numAcceptable
+				numAcceptable = 0;
+
+				// Run the following as long as there is a material left
+				for(int i = 0; i < numOfMat; ++i)
+				{
+					// Read in each id
+					cases_in >> id;
+
+					// Store the results of the functions
+					bool matKnown = materialIsKnown(id);
+
+					// If the material id is not known, output that it is not known and not acceptable
+					if (matKnown == 0)
+					{
+						out << "Unknown Material is unacceptable" << endl;
+					}
+
+					// If the material id is known, run the rest of the tests
+					else
+					{
+						// Assign the result of each function into variables
+						bool evalH = evalHeatTransfer(k.at(id - 1), t, d, diffT, L, Q_threshold);
+						bool evalS = evalStress(Y.at(id - 1), 750000, L, S);
+						bool evalC = evalCost(c.at(id - 1), d, L, C_threshold);
+						
+						// If all the tests don't pass, output the material is not acceptable
+						if (evalH == 1 && evalS == 1 && evalC == 1)
+						{
+							out << matName.at(id - 1) << " is acceptable" << endl;
+							++numAcceptable;
+						}
+
+						// If all the tests pass, output the material is acceptable
+						else 
+						{
+							out << matName.at(id - 1) << " is unacceptable" << endl;
+							
+						}
+
+					}
+				}
+				// Output how many were acceptable
+				out << numAcceptable << " of " << numOfMat << " were acceptable" << endl << endl;
+
+				// Add one to the test case number
+				++t_case;
+			}
+
+			// Close the istream and ostream
+			cases_in.close();
+			out.close();
+		}
+
+	</pre>
+
+	<br />
+	<!-- Input files -->
+	<h2>Input Files</h2>
+
+	<h3>Test Cases</h3>
+
+	<pre class = "code">
+		4
+		300
+		15
+		1
+		0.1667
+		805000
+		9000000
+		4
+		1
+		2
+		4
+		6
+
+		4
+		400
+		8
+		0.5
+		0.0417
+		18500
+		800000
+		5
+		1
+		3
+		4
+		8
+		11
+
+		1
+		400
+		20
+		1.5
+		0.375
+		45000
+		1000000
+		0
+
+	</pre>
+
+	<br />
+
+	<h3>Material Properties File</h3>
+
+	<pre class = "code">
+		Concrete					1.5	   40000000	 6.2
+		Aluminum_Plate					205	  276000000	10.3
+		Asphalt						0.75   	   43000000	 5.1
+		Steel_Plate					43	  250000000	 7.7
+		Composite_Sandwich_Panel			23	  560000000	18.8
+		Proximete					6.3	   55000000	 4.5
+
+	</pre>
+
+	<br />
+
+	<!-- Text file -->
+	<h2>Output File</h2>
+
+	<pre class="code">
+		Test Case 1
+		L = 15
+		d = 1
+		Q = 805000
+		C = 9e+06
+		Processing 4 materials
+		Concrete is unacceptable
+		Aluminum_Plate is acceptable
+		Steel_Plate is unacceptable
+		Proximete is unacceptable
+		1 of 4 were acceptable
+
+		Test Case 2
+		L = 8
+		d = 0.5
+		Q = 18500
+		C = 800000
+		Processing 5 materials
+		Concrete is acceptable
+		Asphalt is acceptable
+		Steel_Plate is unacceptable
+		Unknown Material is unacceptable
+		Unknown Material is unacceptable
+		2 of 5 were acceptable
+
+		Test Case 3
+		L = 20
+		d = 1.5
+		Q = 45000
+		C = 1e+06
+		Processing 0 materials
+		0 of 0 were acceptable
+
+
+
+	</pre>
+
+
+	<!-- Code display -->
+	<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>
