@@ -9,6 +9,32 @@
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Styling for photos -->
+	<style>
+		div.gallery {
+		    margin: 5px;
+		    border: 1px solid #ccc;
+		    float: left;
+		    width: 180px;
+		}
+
+		div.gallery:hover {
+		    border: 1px solid #777;
+		}
+
+		div.gallery img {
+		    width: 100%;
+		    height: auto;
+		}
+
+		div.desc {
+		    padding: 15px;
+		    text-align: center;
+		}
+
+
+	</style>
 </head>
 <body>
 <!-- navbar -->
@@ -80,12 +106,74 @@
 	<h2>Photos</h2>
 	<br />
 
-	<div>
-		<a class = "paragraph" href="SpartaHack">Photo Album of Foo-Pin Ball</a>
+	<div class = "pic-margins">
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/completed.JPG">
+		    <img src="SpartaHack/completed.JPG" alt="Completed Projects" width="300" height="200">
+		  </a>
+		  <div class="desc">Overhead view of Foo-Pin Ball completed.</div>
+		</div>
+
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/design-of-structure.JPG">
+		    <img src="SpartaHack/design-of-structure.JPG" alt="Structure Design" width="300" height="200">
+		  </a>
+		  <div class="desc">Top-down view of nearly completed cardboard structure.</div>
+		</div>
+
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/design-of-circuit.JPG">
+		    <img src="SpartaHack/design-of-circuit.JPG" alt="Circuit Design" width="300" height="200">
+		  </a>
+		  <div class="desc">Assembled circuit including the Arduino, bread board, potentiometers and servos.</div>
+		</div>
+
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/finished-product.JPG">
+		    <img src="SpartaHack/finished-product.JPG" alt="Finished Product" width="300" height="200">
+		  </a>
+		  <div class="desc">Perspective of the finished product, with wires and Arduino fully attached.</div>
+		</div>
+
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/project-work.JPG">
+		    <img src="SpartaHack/project-work.JPG" alt="Project Work" width="300" height="200">
+		  </a>
+		  <div class="desc">Two team members and I working on the project.</div>
+		</div>
+
+		<div class="gallery">
+		  <a target="_blank" href="SpartaHack/prototype.JPG">
+		    <img src="SpartaHack/prototype.JPG" alt="Prototype" width="300" height="200">
+		  </a>
+		  <div class="desc">First prototype, showing the Arduino and some of the wiring.</div>
+		</div>
 	</div>
+
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
 	<br />
 	
 	<!-- Code -->
+	<div>
 	<h2>Code</h2>
 	<br />
 
@@ -147,6 +235,7 @@
 		    
 		}
 	</pre>
+	</div>
 
 
 	<!-- Code display -->
