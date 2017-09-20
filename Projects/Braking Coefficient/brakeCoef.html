@@ -91,100 +91,11 @@
 
 	<br />
 
-	<pre class = "prettyprint code lang-cpp linenums">
-		// Connor Svrcek, Section 3, none, 3/15/17
-		#include < iostream>
-		#include < cmath>
-		using namespace std;
-
-		int main()
-		{
-
-			// Initialize the variables
-			double v0;
-			double cd;
-			double runwayLength;
-
-			// Prompt the user to input the initial velocity
-			cout << "v0 (m/s): ";
-
-			// Store the input as v0
-			cin >> v0;
-
-			// Prompt the user to input the drag coefficient
-			cout << "c_d (1/m): ";
-
-			// Store the input as cd
-			cin >> cd;
-
-			// Prompt the user to input the runway length
-			cout << "runwayLength (m): ";
-
-			// Store the input as runwayLength
-			cin >> runwayLength;
-
-			// Set bMin to 0
-			double bMin = 0;
-
-			// Initialize bMax and set it equal to the equation
-			double bMax;
-			bMax = (pow(v0, 2)) / (2. * runwayLength);
-
-			// Initialize bMid to be the midpoint of bMin and bMax and initialize tolerance
-			double bMid;
-			bMid = (bMax + bMin) / 2;
-
-			// Declare the variables needed for Euler's Method
-			double vold = v0;
-		  	double xold = 0;
-		 	double deltat = 0.00001;
-		 	double tolerance = 0.000001;
-			// Begin loop to search for a number less than the tolerance
-			while((bMax - bMin) > tolerance)
-			{
-				// Reset xold and vold every time the outer loop is run
-				xold = 0;
-				vold = v0;
-				// Loop as long as vold is greater than 0
-				while(vold > 0)
-				{
-					
-					// Euler's Method equations
-					double a = (-1. * bMid) - cd * (pow(vold, 2));
-					double vnew = vold + (a * deltat);
-					double xnew = xold + (vold * deltat);
-
-					// Stores the newly computed values to be computed again
-					vold = vnew;
-					xold = xnew;
-				}
-
-				// Adjusts range of b depending on how xold compares to runwayLength
-				if(xold < runwayLength)
-				{
-					bMax = bMid;
-					bMid = (bMax + bMin) / 2;
-				}
-
-				else if(xold >= runwayLength)
-				{
-					bMin = bMid;
-					bMid = (bMax + bMin) / 2;
-				}
-
-			}
-
-			// Output all the results
-			double b_optimal;
-			b_optimal = bMid;
-			cout << "b_optimal = " << b_optimal << endl;
-
-		}
-		
-
-	</pre>
-
+	<div>
+		<p class = "paragraph">Code can be seen upon request.</p>
+	</div>
 	
+
 
 
 
